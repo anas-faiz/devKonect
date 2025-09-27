@@ -1,0 +1,24 @@
+{
+  "name": "devkonect",
+  "version": "1.0.0",
+  "description": "**DevKonnect** is a developer networking platform designed to help developers connect, collaborate, and share ideas. It allows users to create and update their profiles, explore a developer feed, and send or receive connection requests in a simple and efficient way.",
+  "homepage": "https://github.com/anas-faiz/devKonect#readme",
+  "bugs": {
+    "url": "https://github.com/anas-faiz/devKonect/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anas-faiz/devKonect.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0"
+  }
+}
