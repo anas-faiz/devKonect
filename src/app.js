@@ -8,14 +8,14 @@ const port = process.env.PORT || 4000;
 app.post("/signup",async (req,res)=>{
     
          
-    try{
+    
         const user = new User({
         firstName: 'Anas',
         lastName: 'faiz',
         email: 'anas@faiz.com',
         password: '123@anas',
         });
-
+        try{
      await user.save();
      res.send('user added successfully');
     } catch(err){
