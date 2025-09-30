@@ -19,6 +19,9 @@ app.get("/admin/allData", (req, res) => {
 app.get("/admin/deleteData", (req, res) => {
     res.send('Data Deleted');
 });
+app.use("/",(err,req,res,next)=>{
+    res.status(500).send("something went wrong")
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
