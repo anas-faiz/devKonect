@@ -18,7 +18,7 @@ app.post("/signup",async (req,res)=>{
         res.status(404).send('user not added something went wrong: ' + err.message)
     }
 })
-app.get("/users", async(req,res)=>{
+app.get("/user", async(req,res)=>{
     const userEmail = req.body.email;
     try {
         const findUser = await User.find({email: userEmail})
@@ -32,7 +32,7 @@ app.get("/users", async(req,res)=>{
     }
 })
 app.get("/feed",async(req,res)=>{
-    //const user = req.body.email;
+    
     try{
         const users = await User.find({})
         if(users.length == 0){
@@ -43,6 +43,16 @@ app.get("/feed",async(req,res)=>{
 
     }catch(error){
         res.status(404).send('Something went wrong: ' + error.message);
+    }
+})
+
+app.delete("/user",async(req,res)=>{
+    const userId  = req.body.userId;
+    try {
+        const user = await User.findByIdAndDelete(userId);
+        res.send("user delted sucessfully")
+    } catch (error) {
+        res.status(404).send("user not deleted: "+ error.message)
     }
 })
 
