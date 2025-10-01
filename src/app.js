@@ -5,16 +5,11 @@ const app = express();
 
 const port = process.env.PORT || 4000;
 
-app.post("/signup",async (req,res)=>{
-    
-         
-    
-        const user = new User({
-        firstName: 'Anas',
-        lastName: 'faiz',
-        email: 'anas@faiz.com',
-        password: '123@anas',
-        });
+app.use(express.json());
+
+app.post("/signup",async (req,res)=>{         
+    //creating a new instance in the database 
+        const user = new User(req.body);
         try{
      await user.save();
      res.send('user added successfully');
