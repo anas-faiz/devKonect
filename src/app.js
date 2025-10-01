@@ -19,13 +19,13 @@ app.post("/signup",async (req,res)=>{
     }
 })
 app.get("/feed",async(req,res)=>{
-    const user = req.body.email;
+    //const user = req.body.email;
     try{
-        const feed = await mongoose.find({})
-        if(!feed){
+        const users = await User.find({})
+        if(users.length == 0){
             res.status(400).send("feed not detected")
         }else{
-            res.send(feed); 
+            res.send(users); 
         }
 
     }catch(error){
