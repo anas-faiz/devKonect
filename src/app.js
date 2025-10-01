@@ -22,7 +22,11 @@ app.get("/users", async(req,res)=>{
     const userEmail = req.body.email;
     try {
         const findUser = await User.find({email: userEmail})
-        res.send(findUser)
+        if(findUser.length == 0){
+            res.status(401).send('no user found')
+        }else{
+            res.send(findUser)
+        }
     } catch (error) {
         res.status(404).send("something went wrong : "+error.message)
     }
