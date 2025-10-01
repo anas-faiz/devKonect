@@ -2,6 +2,7 @@ const express = require('express');
 const { connectDB } = require('./config/dataBase')
 const  User = require('./models/user');
 const { default: mongoose } = require('mongoose');
+const { after } = require('node:test');
 const app = express();
 
 const port = process.env.PORT || 4000;
@@ -45,16 +46,43 @@ app.get("/feed",async(req,res)=>{
         res.status(404).send('Something went wrong: ' + error.message);
     }
 })
-app.patch("/user", async (req,res)=>{
-   const userId = req.body.userId;
-   const data = req.body;
+ app.patch("/user", async (req, res) => {
+    const { userId, email, ...data } = req.body;
+
     try {
-        const user = await User.findByIdAndUpdate(userId,data);
-        res.send("user updated succesfully");
+        let user;
+
+        if (userId) {
+            // Update by ID
+            user = await User.findByIdAndUpdate(
+                userId,
+                { $set: data },
+                { new: true }
+            );
+        } else if (email) {
+            // Update by Email
+            user = await User.findOneAndUpdate(
+                { email },
+                { $set: data },
+                { new: true }
+            );
+        } else {
+            return res.status(400).send("Provide either userId or email");
+        }
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.json({
+            message: "User updated successfully",
+            user,
+        });
     } catch (error) {
-        res.status(404).send("something went wrong : " + error.message)
+        res.status(500).send("Something went wrong: " + error.message);
     }
-})
+});
+
 
 app.delete("/user",async(req,res)=>{
     const userId  = req.body.userId;
