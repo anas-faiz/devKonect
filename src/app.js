@@ -18,6 +18,15 @@ app.post("/signup",async (req,res)=>{
         res.status(404).send('user not added something went wrong: ' + err.message)
     }
 })
+app.get("/users", async(req,res)=>{
+    const userEmail = req.body.email;
+    try {
+        const findUser = await User.find({email: userEmail})
+        res.send(findUser)
+    } catch (error) {
+        res.status(404).send("something went wrong : "+error.message)
+    }
+})
 app.get("/feed",async(req,res)=>{
     //const user = req.body.email;
     try{
