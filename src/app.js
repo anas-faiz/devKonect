@@ -45,6 +45,16 @@ app.get("/feed",async(req,res)=>{
         res.status(404).send('Something went wrong: ' + error.message);
     }
 })
+app.patch("/user", async (req,res)=>{
+   const userId = req.body.userId;
+   const data = req.body;
+    try {
+        const user = await User.findByIdAndUpdate(userId,data);
+        res.send("user updated succesfully");
+    } catch (error) {
+        res.status(404).send("something went wrong : " + error.message)
+    }
+})
 
 app.delete("/user",async(req,res)=>{
     const userId  = req.body.userId;
