@@ -56,7 +56,11 @@ app.patch("/user", async (req, res) => {
 
   try {
     let user;
-
+    let allowedData = ["skills","age","about","photoUrl","gender","email","userId"]
+    let updateAllowed = Object.keys(req.body).every((k)=>allowedData.includes(k))
+    if(!updateAllowed){
+      throw new Error ("you can only update skills , gender,age,about and pfp")
+    }
     if (userId) {
       // Update by ID
       user = await User.findByIdAndUpdate(
