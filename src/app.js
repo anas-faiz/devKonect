@@ -13,6 +13,13 @@ app.post("/signup", async (req, res) => {
   //creating a new instance in the database
   const user = new User(req.body);
   try {
+    const validData = ["firstName","lastName","email","password"];
+    const allowedData = Object.keys(req.body).every((k)=>
+      validData.includes(k)
+    );
+    if(!allowedData){
+      throw new Error("Only email,password and name are required");
+    }
     await user.save();
     res.send("user added successfully");
   } catch (err) {
