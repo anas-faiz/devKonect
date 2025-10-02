@@ -61,6 +61,9 @@ app.patch("/user", async (req, res) => {
     if(!updateAllowed){
       throw new Error ("you can only update skills , gender,age,about and pfp")
     }
+    if(data.skills.length > 10){
+      throw new Error ("only 10 skills are allowed");
+    }
     if (userId) {
       // Update by ID
       user = await User.findByIdAndUpdate(
