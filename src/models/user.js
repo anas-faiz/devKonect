@@ -30,16 +30,13 @@ const userSchema = new mongoose.Schema({
         type: Number,
         min:18
     },
-    gender:{
+    gender: {
         type: String,
         lowercase: true,
-        validate(value){
-            if(!["male","female","others"].includes(value)){
-                throw new Error("Gender data is not valid")
-            }
-        }
-
+        enum: ["male", "female", "others"],
+        //required: true  // optional, if you want gender to be mandatory
     },
+
     photoUrl:{
         type: String,
         default: "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg"

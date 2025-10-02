@@ -55,14 +55,18 @@ app.patch("/user", async (req, res) => {
       user = await User.findByIdAndUpdate(
         userId,
         { $set: data },
-        { new: true }
+        { new: true,
+          runValidators: true},
+        
       );
     } else if (email) {
       // Update by Email
       user = await User.findOneAndUpdate(
         { email },
         { $set: data },
-        { new: true }
+        { new: true,
+          runValidators: true},
+        
       );
     } else {
       return res.status(400).send("Provide either userId or email");
