@@ -2,7 +2,7 @@ const express = require("express");
 const { connectDB } = require("./config/dataBase");
 const User = require("./models/user");
 const { default: mongoose } = require("mongoose");
-const { after } = require("node:test");
+const {validSignUpData} = require('./utils/validators')
 const app = express();
 
 const port = process.env.PORT || 4000;
@@ -10,9 +10,14 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
+ try {
+  //validation of data
+  validSignUpData(req);
+  //encryption  of password
+  
   //creating a new instance in the database
   const user = new User(req.body);
-  try {
+  
     const validData = ["firstName","lastName","email","password"];
     const allowedData = Object.keys(req.body).every((k)=>
       validData.includes(k)
@@ -23,7 +28,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("user added successfully");
   } catch (err) {
-    res.status(404).send("user not added,something went wrong: " + err.message);
+    res.status(404).send("Error : " + err.message);
   }
 });
 app.get("/user", async (req, res) => {
