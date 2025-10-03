@@ -5,6 +5,7 @@ const { default: mongoose } = require("mongoose");
 const {validSignUpData} = require('./utils/validators')
 const bcrypt = require('bcrypt')
 const app = express();
+const validator = require('validator');
 
 const port = process.env.PORT || 4000;
 
@@ -42,19 +43,27 @@ app.post("/signup", async (req, res) => {
 });
 app.post("/login", async (req , res)=>{
   const {email,password} = req.body;
-  //vallidating the email
-  validSignUpData(email);
+  try {
+    //vallidating the email
+  if(!validator.isEmail(email)){
+    throw new Error ("enter a valid Email");
+  };
   //checking for email in db
-  const user = await User.find(emai= email);
+  const user = await User.findOne({email: email});
   if(!user){
     throw new Error ("Enter the right emaiil");
   }
   const isPasswordValid = await bcrypt.compare(password,user.password);
   if(!isPasswordValid){
-    throw new Error ("ENter Right Password")
+    throw new Error ("ENter Right Password");
   }else{
     res.send("Login Successfully");
+  }  
+  } catch (error) {
+    res.status(404).send("ERROR : "+ error.message);
+    
   }
+  
 })
 app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
