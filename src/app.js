@@ -3,6 +3,7 @@ const { connectDB } = require("./config/dataBase");
 const User = require("./models/user");
 const { default: mongoose } = require("mongoose");
 const {validSignUpData} = require('./utils/validators')
+const bcrypt = require('bcrypt')
 const app = express();
 
 const port = process.env.PORT || 4000;
@@ -13,10 +14,18 @@ app.post("/signup", async (req, res) => {
  try {
   //validation of data
   validSignUpData(req);
+
+  const {email,password,firstName,lastName} = req.body;
   //encryption  of password
-  
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   //creating a new instance in the database
-  const user = new User(req.body);
+  const user = new User({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
   
     const validData = ["firstName","lastName","email","password"];
     const allowedData = Object.keys(req.body).every((k)=>
