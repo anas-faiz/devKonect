@@ -2,8 +2,8 @@ const express = require("express");
 const { connectDB } = require("./config/dataBase");
 const User = require("./models/user");
 const { default: mongoose } = require("mongoose");
-const {validSignUpData,validLoginData} = require('./utils/validators')
-const bcrypt = require('bcrypt')
+const { validSignUpData, validLoginData } = require("./utils/validators");
+const bcrypt = require("bcrypt");
 const app = express();
 
 const port = process.env.PORT || 4000;
@@ -11,27 +11,27 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
- try {
-  //validation of data
-  validSignUpData(req);
+  try {
+    //validation of data
+    validSignUpData(req);
 
-  const {email,password,firstName,lastName} = req.body;
-  //encryption  of password
-  const hashedPassword = await bcrypt.hash(password, 10);
+    const { email, password, firstName, lastName } = req.body;
+    //encryption  of password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  //creating a new instance in the database
-  const user = new User({
-    firstName,
-    lastName,
-    email,
-    password: hashedPassword,
-  });
-  
-    const validData = ["firstName","lastName","email","password"];
-    const allowedData = Object.keys(req.body).every((k)=>
+    //creating a new instance in the database
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
+
+    const validData = ["firstName", "lastName", "email", "password"];
+    const allowedData = Object.keys(req.body).every((k) =>
       validData.includes(k)
     );
-    if(!allowedData){
+    if (!allowedData) {
       throw new Error("Only email,password and name are required");
     }
     await user.save();
@@ -40,28 +40,26 @@ app.post("/signup", async (req, res) => {
     res.status(404).send("Error : " + err.message);
   }
 });
-app.post("/login", async (req , res)=>{
-  const {email,password} = req.body;
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
   try {
     //vallidating the email
-  validLoginData({email,password})
-  //checking for email in db
-  const user = await User.findOne({email: email});
-  if(!user){
-    throw new Error ("Enter the right emaiil");
-  }
-  const isPasswordValid = await bcrypt.compare(password,user.password);
-  if(!isPasswordValid){
-    throw new Error ("ENter Right Password");
-  }else{
-    res.send("Login Successfully");
-  }  
+    validLoginData({ email, password });
+    //checking for email in db
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("Enter the right emaiil");
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error("ENter Right Password");
+    } else {
+      res.send("Login Successfully");
+    }
   } catch (error) {
-    res.status(404).send("ERROR : "+ error.message);
-    
+    res.status(404).send("ERROR : " + error.message);
   }
-  
-})
+});
 app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
   try {
@@ -92,31 +90,37 @@ app.patch("/user", async (req, res) => {
 
   try {
     let user;
-    let allowedData = ["skills","age","about","photoUrl","gender","email","userId"]
-    let updateAllowed = Object.keys(req.body).every((k)=>allowedData.includes(k))
-    if(!updateAllowed){
-      throw new Error ("you can only update skills , gender,age,about and pfp")
+    let allowedData = [
+      "skills",
+      "age",
+      "about",
+      "photoUrl",
+      "gender",
+      "email",
+      "userId",
+    ];
+    let updateAllowed = Object.keys(req.body).every((k) =>
+      allowedData.includes(k)
+    );
+    if (!updateAllowed) {
+      throw new Error("you can only update skills , gender,age,about and pfp");
     }
-    if(data.skills.length > 10){
-      throw new Error ("only 10 skills are allowed");
+    if (data.skills.length > 10) {
+      throw new Error("only 10 skills are allowed");
     }
     if (userId) {
       // Update by ID
       user = await User.findByIdAndUpdate(
         userId,
         { $set: data },
-        { new: true,
-          runValidators: true},
-        
+        { new: true, runValidators: true }
       );
     } else if (email) {
       // Update by Email
       user = await User.findOneAndUpdate(
         { email },
         { $set: data },
-        { new: true,
-          runValidators: true},
-        
+        { new: true, runValidators: true }
       );
     } else {
       return res.status(400).send("Provide either userId or email");
