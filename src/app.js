@@ -40,6 +40,22 @@ app.post("/signup", async (req, res) => {
     res.status(404).send("Error : " + err.message);
   }
 });
+app.post("/login", async (req , res)=>{
+  const {email,password} = req.body;
+  //vallidating the email
+  validSignUpData(email);
+  //checking for email in db
+  const user = await User.find(emai= email);
+  if(!user){
+    throw new Error ("Enter the right emaiil");
+  }
+  const isPasswordValid = await bcrypt.compare(password,user.password);
+  if(!isPasswordValid){
+    throw new Error ("ENter Right Password")
+  }else{
+    res.send("Login Successfully");
+  }
+})
 app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
   try {
