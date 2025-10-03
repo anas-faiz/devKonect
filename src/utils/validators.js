@@ -1,29 +1,24 @@
-const validator = require('validator');
+const validator = require("validator");
 
-
-function validSignUpData (req){
-    const {email,password,firstName,lastName} = req.body;
-    if(!firstName || !lastName){
-        throw new Error ("name is not given")
-    }
-    else if(!validator.isEmail(email)){
-        throw new Error ("Not a valid Email : "+email)
-    }
-    else if(!validator.isStrongPassword(password)){
-        throw new Error ("enter a strong password : weak password "+ password)
-    }
-            
+function validSignUpData(req) {
+  const { email, password, firstName, lastName } = req.body;
+  if (!firstName || !lastName) {
+    throw new Error("name is not given");
+  } else if (!validator.isEmail(email)) {
+    throw new Error("Not a valid Email : " + email);
+  } else if (!validator.isStrongPassword(password)) {
+    throw new Error("enter a strong password : weak password " + password);
+  }
 }
-function validLoginData({email,password}){
-    if(!email || !password){
-        throw new Error ("Enter email and Password");
-    }
-    else if(!validator.isEmail(email)){
-        throw new Error ("Enter a valid email address")
-    }
+function validLoginData({ email, password }) {
+  if (!email || !password) {
+    throw new Error("Enter email and Password");
+  } else if (!validator.isEmail(email)) {
+    throw new Error("Enter a valid email address");
+  }
 }
 
 module.exports = {
-    validSignUpData,
-    validLoginData
-}
+  validSignUpData,
+  validLoginData,
+};
