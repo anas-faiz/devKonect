@@ -14,7 +14,16 @@ function validSignUpData (req){
     }
             
 }
+function validLoginData({email,password}){
+    if(!email || !password){
+        throw new Error ("Enter email and Password");
+    }
+    else if(!validator.isEmail(email)){
+        throw new Error ("Enter a valid email address")
+    }
+}
 
 module.exports = {
     validSignUpData,
+    validLoginData
 }

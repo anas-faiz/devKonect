@@ -2,10 +2,9 @@ const express = require("express");
 const { connectDB } = require("./config/dataBase");
 const User = require("./models/user");
 const { default: mongoose } = require("mongoose");
-const {validSignUpData} = require('./utils/validators')
+const {validSignUpData,validLoginData} = require('./utils/validators')
 const bcrypt = require('bcrypt')
 const app = express();
-const validator = require('validator');
 
 const port = process.env.PORT || 4000;
 
@@ -45,9 +44,7 @@ app.post("/login", async (req , res)=>{
   const {email,password} = req.body;
   try {
     //vallidating the email
-  if(!validator.isEmail(email)){
-    throw new Error ("enter a valid Email");
-  };
+  validLoginData({email,password})
   //checking for email in db
   const user = await User.findOne({email: email});
   if(!user){
