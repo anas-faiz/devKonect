@@ -4,11 +4,15 @@ const User = require("./models/user");
 const { default: mongoose } = require("mongoose");
 const { validSignUpData, validLoginData } = require("./utils/validators");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const app = express();
+
 
 const port = process.env.PORT || 4000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -40,6 +44,7 @@ app.post("/signup", async (req, res) => {
     res.status(404).send("Error : " + err.message);
   }
 });
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -54,12 +59,15 @@ app.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       throw new Error("ENter Right Password");
     } else {
+      const token = await jwt.sign({ _id: user._id },  "devKonect");
+      res.cookie("token", token);
       res.send("Login Successfully");
     }
   } catch (error) {
     res.status(404).send("ERROR : " + error.message);
   }
 });
+
 app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
   try {
@@ -73,6 +81,7 @@ app.get("/user", async (req, res) => {
     res.status(404).send("something went wrong : " + error.message);
   }
 });
+
 app.get("/feed", async (req, res) => {
   try {
     const users = await User.find({});
@@ -85,6 +94,7 @@ app.get("/feed", async (req, res) => {
     res.status(404).send("Something went wrong: " + error.message);
   }
 });
+
 app.patch("/user", async (req, res) => {
   const { userId, email, ...data } = req.body;
 
