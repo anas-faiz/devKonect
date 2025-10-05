@@ -55,11 +55,11 @@ app.post("/login", async (req, res) => {
     if (!user) {
       throw new Error("No user with this email");
     }
-    const isPasswordValid = await comparePassword(password);
+    const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
       throw new Error("password not valid");
     } else {
-      const token = await getjwt();
+      const token = await user.getJWt();
       res.cookie("token", token, {
         expires: new Date(Date.now() + 2 * 3600000)
       });
