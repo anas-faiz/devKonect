@@ -60,7 +60,9 @@ app.post("/login", async (req, res) => {
       throw new Error("password not valid");
     } else {
       const token = await jwt.sign({ _id: user._id },  "devKonect", {expiresIn: "1d"});
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 2 * 3600000)
+      });
       res.send("Login Successfully");
     }
   } catch (error) {
