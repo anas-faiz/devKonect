@@ -53,11 +53,11 @@ app.post("/login", async (req, res) => {
     //checking for email in db
     const user = await User.findOne({ email: email });
     if (!user) {
-      throw new Error("Enter the right emaiil");
+      throw new Error("No user with this email");
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error("ENter Right Password");
+      throw new Error("password not valid");
     } else {
       const token = await jwt.sign({ _id: user._id },  "devKonect");
       res.cookie("token", token);
