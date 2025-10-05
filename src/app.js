@@ -1,12 +1,11 @@
 const express = require("express");
 const { connectDB } = require("./config/dataBase");
 const User = require("./models/user");
-const { default: mongoose } = require("mongoose");
 const { validSignUpData, validLoginData } = require("./utils/validators");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const { error } = require("console");
+const {userAuth} = require("./middleWares/auth")
 const app = express();
 
 
@@ -69,24 +68,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async(req,res)=>{
+app.get("/profile",userAuth, async(req,res)=>{
  try {
-   const cookies = req.cookies;
-   const { token } = cookies;
-   if(!token){
-    throw new error("invalid token");    
-   }
-    const decodedToken = await jwt.verify( token , "devKonect")
-    
-    const { _id } = decodedToken;
-
-    const user  = await User.findById({_id})
-
-    if(!user){
-      throw new error ("user does not exist")
-    }
+    const user = req.user;
     res.send(user);
-
  } catch (error) {
       res.status(404).send("ERROR : " + error.message);
  }

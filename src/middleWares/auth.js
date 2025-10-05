@@ -1,24 +1,33 @@
-const adminAuth = (req, res, next) => {
-  const token = "XYZ"; // Use const/let to avoid accidental global variable
-  const adminAuthKey = token === "XYZ";
+const jwt  = require('jsonwebtoken');
+const User = require('../models/user') 
 
-  if (!adminAuthKey) {
-    return res.status(401).send("Unauthorized Access");
+const userAuth = async (req, res, next) => {
+  try {
+      const { token  } = req.cookies;
+
+  if(!token){
+    throw new error("invalid attempt")
   }
-  next();
-};
 
-const userAuth = (req, res, next) => {
-  const token = "USER";
-  const userAuthKey = token === "USER";
+  const decodedToken = await jwt.verify(token,"devKonect");
 
-  if (!userAuthKey) {
-    return res.status(401).send("Not a User");
+  const { _id } = decodedToken;
+
+  const user = await User.findById({_id});
+
+  if(!user){
+    throw new error ("User not found")
   }
+
+  req.user = user;
+    
   next();
+
+  } catch (error) {
+    res.status(400).send("Error : "+ error.message);
+  }
 };
 
 module.exports = {
-  adminAuth,
-  userAuth,
+  userAuth
 };
