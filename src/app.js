@@ -55,11 +55,11 @@ app.post("/login", async (req, res) => {
     if (!user) {
       throw new Error("No user with this email");
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await comparePassword(password);
     if (!isPasswordValid) {
       throw new Error("password not valid");
     } else {
-      const token = await jwt.sign({ _id: user._id },  "devKonect", {expiresIn: "1d"});
+      const token = await getjwt();
       res.cookie("token", token, {
         expires: new Date(Date.now() + 2 * 3600000)
       });
