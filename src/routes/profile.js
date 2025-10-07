@@ -1,7 +1,7 @@
 const express = require("express");
-const {userAuth} = require("./middleWares/auth")
+const {userAuth} = require("../middleWares/auth")
 
-const profileRoter = express.Router();
+const profileRouter = express.Router();
 
 
 profileRouter.get("/profile",userAuth, async(req,res)=>{
@@ -14,4 +14,4 @@ profileRouter.get("/profile",userAuth, async(req,res)=>{
 
 })
 
-module.exports = profileRoter;
+module.exports = profileRouter;
