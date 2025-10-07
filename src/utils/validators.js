@@ -18,7 +18,23 @@ function validLoginData({ email, password }) {
   }
 }
 
+function validEditData(req){
+  try {    
+  const allowedEdits = ['age', 'skills','firstName','lastName','about','photourl'];
+  const isEditallowed = Object.keys(req.body).every((k)=>allowedEdits.includes(k));
+  if(!isEditallowed){
+    throw new Error ("invalid edit attempt")
+  }
+
+  return isEditallowed;
+
+  } catch (error) {
+    res.status(404).send("Error : " + error.message);
+  }
+}
+
 module.exports = {
   validSignUpData,
   validLoginData,
+  validEditData,
 };
