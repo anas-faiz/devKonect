@@ -1,4 +1,5 @@
 const express = require("express");
+const {userAuth} = require("./middleWares/auth")
 
 const profileRoter = express.Router();
 
