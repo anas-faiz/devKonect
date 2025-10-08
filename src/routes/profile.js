@@ -1,17 +1,17 @@
 const express = require("express");
-const {userAuth} = require("../middleWares/auth")
-const {validEditData} = require("../utils/validators")
+const { userAuth } = require("../middleWares/auth")
+const { validEditData } = require("../utils/validators")
 
 const profileRouter = express.Router();
 
 
-profileRouter.get("/profile/view",userAuth, async(req,res)=>{
- try {
+profileRouter.get("/profile/view", userAuth, async (req, res) => {
+  try {
     const user = req.user;
     res.send(user);
- } catch (error) {
-      res.status(404).send("ERROR : " + error.message);
- }
+  } catch (error) {
+    res.status(404).send("ERROR : " + error.message);
+  }
 })
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
@@ -29,6 +29,6 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     // Always handle errors and send a response
     res.status(400).send("Error: " + error.message);
   }
-}); 
+});
 
 module.exports = profileRouter;

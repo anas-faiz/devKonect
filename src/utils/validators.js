@@ -18,9 +18,9 @@ function validLoginData({ email, password }) {
   }
 }
 
-function validEditData(req){
+function validEditData(req) {
 
-    const allowedEdits = ["age", "skills", "firstName", "lastName", "about", "photoUrl"];
+  const allowedEdits = ["age", "skills", "firstName", "lastName", "about", "photoUrl"];
   const isEditAllowed = Object.keys(req.body).every((key) => allowedEdits.includes(key));
 
   if (!isEditAllowed) {
@@ -29,7 +29,7 @@ function validEditData(req){
 
   return true;
 
-  
+
 }
 
 module.exports = {
