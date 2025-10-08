@@ -19,18 +19,17 @@ function validLoginData({ email, password }) {
 }
 
 function validEditData(req){
-  try {    
-  const allowedEdits = ['age', 'skills','firstName','lastName','about','photourl'];
-  const isEditallowed = Object.keys(req.body).every((k)=>allowedEdits.includes(k));
-  if(!isEditallowed){
-    throw new Error ("invalid edit attempt")
+
+    const allowedEdits = ["age", "skills", "firstName", "lastName", "about", "photoUrl"];
+  const isEditAllowed = Object.keys(req.body).every((key) => allowedEdits.includes(key));
+
+  if (!isEditAllowed) {
+    throw new Error("Invalid edit attempt");
   }
 
-  return isEditallowed;
+  return true;
 
-  } catch (error) {
-    res.status(404).send("Error : " + error.message);
-  }
+  
 }
 
 module.exports = {

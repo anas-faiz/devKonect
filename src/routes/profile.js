@@ -13,24 +13,22 @@ profileRouter.get("/profile/view",userAuth, async(req,res)=>{
       res.status(404).send("ERROR : " + error.message);
  }
 })
+profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+  try {
+    validEditData(req); // This might throw
 
-profileRouter.patch("/profile/edit", userAuth, async(req,res)=>{
-   try {
-      if(!validEditData(req)){
-         throw new Error ("invalid edit attempt")
-      }
+    const user = req.user;
+    Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
+    await user.save();
 
-      const user = req.user;
+    const safeUser = user.toObject();
+    delete safeUser.password;
 
-      Object.keys(req.body).forEach((keys)=>user[keys] = req.body[keys]);
-      await user.save();
-      res.send(user);     
-      
-   } catch (error) {
-      res.status(400).send("Error : " + error.message)
-   }
-   
-
-})
+    res.send(safeUser);
+  } catch (error) {
+    // Always handle errors and send a response
+    res.status(400).send("Error: " + error.message);
+  }
+}); 
 
 module.exports = profileRouter;
