@@ -9,7 +9,7 @@ const userAuth = async (req, res, next) => {
       throw new Error(" invalid attempt ");
     }
 
-    const decodedToken = await jwt.verify(token, "devKonect");
+    const decodedToken = jwt.verify(token, "devKonect");
 
     const { _id } = decodedToken;
 
