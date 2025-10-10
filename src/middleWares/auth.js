@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user')
+const User = require('../models/user');
 
 const userAuth = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ const userAuth = async (req, res, next) => {
     const user = await User.findById({ _id });
 
     if (!user) {
-      throw new Error("User not found")
+      throw new Error("User not found");
     }
 
     req.user = user;
@@ -29,5 +29,5 @@ const userAuth = async (req, res, next) => {
 };
 
 module.exports = {
-  userAuth
+  userAuth,
 };
