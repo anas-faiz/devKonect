@@ -1,25 +1,29 @@
-const mongoose = require("mongooose");
+const mongoose = require("mongoose");
 
-const connectionRequestSchema = new mongoose.Schema({
-    fromUserId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
+const connectionRequestSchema = new mongoose.Schema(
+  {
+    fromUserId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    toUserId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
+    toUserId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    status:{
-        type: String,
-        required: true,
-        enum:{
-            value:["accepted","interested","rejected","ignore"],
-            message: "{value} is not a status type",
-        }
-    }
-},{timestamps: true})
+    status: {
+      type: String,
+      required: true,
+      enum: ["accepted", "interested", "rejected", "ignore"],
+    },
+  },
+  { timestamps: true }
+);
 
+const ConnectionRequestModel = mongoose.model(
+  "connectionRequest",
+  connectionRequestSchema
+);
 
-const ConnectionRequestModel = new Mongoose.model("connectionRequest",connectionRequestSchema);
-
-module.exports = ConnectionRequestModel
+module.exports = ConnectionRequestModel;
