@@ -1,13 +1,24 @@
 const express = require("express");
 const { userAuth } = require("../middleWares/auth");
-
+const ConnectionRequestModel = require("../models/connectionRequest")
 const requestRouter = express.Router();
 
-requestRouter.post("/request/send/:status/:toUserID", userAuth, (req, res) => {
+requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res) => {
   try { 
     const fromUserId = req.user._id;
     const toUserId = req.params.toUserID;
     const status = req.params.status;
+
+    const connectionRequest = new ConnectionRequestModel({
+      fromUserId,
+      toUserId,
+      status
+    }) 
+
+    const data = await connectionRequest.save();
+
+    res.json({message: "request sent successfully",
+              data : data})
 
     
 
