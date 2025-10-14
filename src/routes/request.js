@@ -23,9 +23,11 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
       throw new Error ("user does not exist")
     }
 
-    const existingConnectionRequest = await ConnectionRequestModel.findOne({
-      fromUserId: fromUserId , toUserId: toUserId
-    })
+    const existingConnectionRequest = await ConnectionRequestModel.findOne(
+      $or[
+        {fromUserId: fromUserId , toUserId: toUserId},
+        {fromUserId: toUserId , toUserId: fromUserId}
+      ])
 
     if(existingConnectionRequest){
       throw new Error ("Request already exists");
