@@ -23,7 +23,7 @@ const ConnectionRequestSchema = new mongoose.Schema(
 ConnectionRequestSchema.index({fromUserId: 1, toUserId: 1})
 
 const ConnectionRequestModel = mongoose.model(
-  "connectionRequest",
+  "ConnectionRequest",
   ConnectionRequestSchema
 );
 
