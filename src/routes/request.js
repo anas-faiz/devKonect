@@ -8,7 +8,17 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
     const fromUserId = req.user._id;
     const toUserId = req.params.toUserID;
     const status = req.params.status;
+    
+    const allowedStatus = ["interested","ignore"]
 
+    const existingStatus = allowedStatus.includes(status);
+
+    if(!existingStatus){
+      throw new Error ("unallowed status action")
+    }
+
+    
+    
     const connectionRequest = new ConnectionRequestModel({
       fromUserId,
       toUserId,
@@ -17,7 +27,7 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
 
     const data = await connectionRequest.save();
 
-    res.json({message: "request sent successfully",
+    res.json({message:"request sent successfully to ${} ",
               data : data})
 
     
