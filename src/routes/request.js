@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middleWares/auth");
-const ConnectionRequestModel = require("../models/connectionRequest")
+const ConnectionRequestModel = require("../models/connectionRequest");
+const User = require("../models/user");
 const requestRouter = express.Router();
 
 requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res) => {
@@ -17,7 +18,12 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
       throw new Error ("unallowed status action")
     }
 
-    
+    const existingUser = await User.findById(toUserId);
+    if(!existingUser){
+      throw new Error ("user does not exist")
+    }
+
+
     
     const connectionRequest = new ConnectionRequestModel({
       fromUserId,
