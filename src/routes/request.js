@@ -23,6 +23,13 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
       throw new Error ("user does not exist")
     }
 
+    const existingConnectionRequest = await ConnectionRequestModel.findOne({
+      fromUserId: fromUserId , toUserId: toUserId
+    })
+
+    if(existingConnectionRequest){
+      throw new Error ("Request already exists");
+    }
 
     
     const connectionRequest = new ConnectionRequestModel({
@@ -33,7 +40,7 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
 
     const data = await connectionRequest.save();
 
-    res.json({message:"request sent successfully to ${} ",
+    res.json({message: req.user.firstName +" request sent successfully to " + existingUser.firstName,
               data : data})
 
     
