@@ -53,7 +53,11 @@ requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res)
 })
 
 requestRouter.post("/request/review/:status/:toUserId"),userAuth, async (req,res) =>{
-  
+  try {
+    const loggedInUser = req.body;
+  } catch (error) {
+    res.status(404).send("error : " + error.message)
+  }
 }
 
 
