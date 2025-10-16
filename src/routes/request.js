@@ -57,17 +57,17 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async(req,res
   try{
     const loggedInUser = req.user;
     const {status,requestId} = req.params;
-    const allowedStatus = ["acceptd","rejected"];
+    const allowedStatus = ["accepted","rejected"];
     if(!allowedStatus.includes(status)){
-      throw new error ("invalid status")
+      throw new Error ("invalid status")
     }
     const request = await ConnectionRequest.findOne({
       _id: requestId,
       toUserId: loggedInUser._id,
-      status:interested
+      status: "interested"
     })
     if(!request){
-      throw new error ("Request not found");
+      throw new Error ("Request not found");
     }
 
     request.status = status;
