@@ -4,7 +4,6 @@ const { validEditData } = require("../utils/validators")
 
 const profileRouter = express.Router();
 
-
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
@@ -15,8 +14,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 })
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
-    validEditData(req); // This might throw
-
+    validEditData(req);
     const user = req.user;
     Object.keys(req.body).forEach((key) => (user[key] = req.body[key]));
     await user.save();
