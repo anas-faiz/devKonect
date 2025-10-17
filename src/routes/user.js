@@ -37,7 +37,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
           .populate("toUserId", "firstName lastName photoUrl")
 
         const connectionData  = connections.map(row=>{
-            if(row.fromUserId._id.toString() == loggedInUser.toString()){
+            if(row.fromUserId._id.toString() === loggedInUser._id.toString()){
                 return row.toUserId;
             }
             return row.fromUserId;
@@ -45,6 +45,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
         res.json({
             message: "available connections",
+            count:connectionData.length,
             data: connectionData
         })
 
