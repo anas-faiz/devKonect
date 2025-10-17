@@ -35,6 +35,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
             ],
         }).populate("fromUserId", "firstName lastName photoUrl")
           .populate("toUserId", "firstName lastName photoUrl")
+          .lean()
 
         const connectionData  = connections.map(row=>{
             if(row.fromUserId._id.toString() === loggedInUser._id.toString()){
