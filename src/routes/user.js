@@ -34,11 +34,11 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
                 { toUserId: loggedInUser._id, status: "accepted" }
             ],
         }).populate("fromUserId", "firstName lastName photoUrl")
-          .populate("toUserId", "firstName lastName photoUrl")
-          .lean()
+            .populate("toUserId", "firstName lastName photoUrl")
+            .lean()
 
-        const connectionData  = connections.map(row=>{
-            if(row.fromUserId._id.toString() === loggedInUser._id.toString()){
+        const connectionData = connections.map(row => {
+            if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
                 return row.toUserId;
             }
             return row.fromUserId;
@@ -46,7 +46,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 
         res.json({
             message: "available connections",
-            count:connectionData.length,
+            count: connectionData.length,
             data: connectionData
         })
 
@@ -55,12 +55,13 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     }
 })
 
-userRouter.get("/user/feed", userAuth, async(req,res)=>{
-    try{
+userRouter.get("/user/feed", userAuth, async (req, res) => {
+    try {
         const loggedInUser = req.user
 
-    }catch(error){
+    } catch (error) {
         res.status(404).send("ERROR : " + error.message)
     }
 })
+
 module.exports = userRouter;
