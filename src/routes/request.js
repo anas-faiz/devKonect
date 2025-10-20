@@ -4,10 +4,10 @@ const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 const requestRouter = express.Router();
 
-requestRouter.post("/request/send/:status/:toUserID", userAuth, async (req, res) => {
+requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   try { 
     const fromUserId = req.user._id;
-    const toUserId = req.params.toUserID;
+    const toUserId = req.params.toUserId;
     const status = req.params.status;
     
     const allowedStatus = ["interested","ignore"]
@@ -58,14 +58,17 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async(req,res
     const loggedInUser = req.user;
     const {status,requestId} = req.params;
     const allowedStatus = ["accepted","rejected"];
+    
     if(!allowedStatus.includes(status)){
       throw new Error ("invalid status")
     }
+    
     const request = await ConnectionRequest.findOne({
       _id: requestId,
       toUserId: loggedInUser._id,
       status: "interested"
     })
+    
     if(!request){
       throw new Error ("Request not found");
     }

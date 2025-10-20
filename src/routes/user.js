@@ -79,8 +79,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
                 {_id: {$ne: loggedInUser._id}}
             ]            
         }).select(user_safe_data)
-
-
+        
         res.json({
             message: "Feed fetched successfullt",
             count:userInFeed.length,
