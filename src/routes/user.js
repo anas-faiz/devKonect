@@ -2,6 +2,9 @@ const express = require('express');
 const userRouter = express.Router();
 const { userAuth } = require('../middleWares/auth');
 const ConnectionRequest = require('../models/connectionRequest')
+const User = require('../models/user')
+
+user_safe_data = "firstName lastName photoUrl skills age gender about";
 
 userRouter.get("/user/requests/received", userAuth, async (req, res) => {
     try {
@@ -61,13 +64,34 @@ userRouter.get("/feed", userAuth, async (req, res) => {
 
         const request = await ConnectionRequest.find({
             $or:[{fromUserId: loggedInUser._id},{toUserId: loggedInUser._id}]
+        }).select("fromUserId toUserId")
+
+        const hideUsers = new Set();
+
+        request.forEach(req =>{
+            hideUsers.add(req.fromUserId.toString());
+            hideUsers.add(req.toUserId.toString());
         })
 
-        res.send(request)
+        const userInFeed = await User.find({
+            $and:[
+                {_id: {$nin: Array.from(hideUsers)}},
+                {_id: {$ne: loggedInUser._id}}
+            ]            
+        }).select(user_safe_data)
+
+
+        res.json({
+            message: "Feed fetched successfullt",
+            count:userInFeed.length,
+            data:userInFeed
+        })
 
     } catch (error) {
         res.status(404).send("ERROR : " + error.message)
     }
 })
+
+
 
 module.exports = userRouter;
