@@ -62,9 +62,14 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
 
+        const page = req.query.page || 1;
+        let limit = req.query.limit || 10;
+
+        const skip = (page-1)*limit;
+
         const request = await ConnectionRequest.find({
             $or:[{fromUserId: loggedInUser._id},{toUserId: loggedInUser._id}]
-        }).select("fromUserId toUserId")
+        }).select("fromUserId toUserId").lean()
 
         const hideUsers = new Set();
 
@@ -78,8 +83,8 @@ userRouter.get("/feed", userAuth, async (req, res) => {
                 {_id: {$nin: Array.from(hideUsers)}},
                 {_id: {$ne: loggedInUser._id}}
             ]            
-        }).select(user_safe_data)
-        
+        }).select(user_safe_data).skip(skip).limit(limit).lean()
+
         res.json({
             message: "Feed fetched successfullt",
             count:userInFeed.length,
