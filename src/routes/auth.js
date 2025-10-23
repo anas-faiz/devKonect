@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 
 const authRouter = express.Router();
 
+
 authRouter.post("/signup", async (req, res) => {
   try {
     //validation of data
@@ -54,7 +55,15 @@ authRouter.post("/login", async (req, res) => {
       res.cookie("token", token, {
         expires: new Date(Date.now() + 2 * 3600000)
       });
-      res.send("Login Successfully");
+
+      const userData = user.toObject();
+
+      delete userData.password
+
+      res.json({
+        message: "Login Succesfull",
+        data: userData
+      });
     }
   } catch (error) {
     res.status(404).send("ERROR : " + error.message);
