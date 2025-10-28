@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 
 const authRouter = express.Router();
 
-
 authRouter.post("/signup", async (req, res) => {
   try {
     //validation of data
@@ -76,7 +75,5 @@ authRouter.post("/logout", (req,res)=>{
     })
     res.send("logout successfully !!!")
 })
-
-
 
 module.exports = authRouter;
