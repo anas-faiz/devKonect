@@ -36,8 +36,8 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
                 { fromUserId: loggedInUser._id, status: "accepted" },
                 { toUserId: loggedInUser._id, status: "accepted" }
             ],
-        }).populate("fromUserId", "firstName lastName photoUrl")
-            .populate("toUserId", "firstName lastName photoUrl")
+        }).populate("fromUserId", "firstName lastName photoUrl age gender")
+            .populate("toUserId", "firstName lastName photoUrl age gender")
             .lean()
 
         const connectionData = connections.map(row => {
