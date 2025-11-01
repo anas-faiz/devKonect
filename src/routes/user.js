@@ -13,7 +13,7 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
         const request = await ConnectionRequest.find({
             toUserId: logegdInUser._id,
             status: "interested"
-        }).populate("fromUserId", "firstName lastName photoUrl")
+        }).populate("fromUserId", "firstName lastName photoUrl age gender")
 
         res.json({
             message: "available connection Request",
@@ -24,7 +24,6 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
     } catch (error) {
         res.status(404).send("ERROR : " + error.message);
     }
-
 })
 
 userRouter.get("/user/connections", userAuth, async (req, res) => {
