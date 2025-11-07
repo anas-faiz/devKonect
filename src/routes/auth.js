@@ -30,8 +30,7 @@ authRouter.post("/signup", async (req, res) => {
       throw new Error("Only email,password and name are required");
     }
     const savedUser = await user.save();
-
-    
+        
       const token = await savedUser.getJWT();
       res.cookie("token", token, {
         expires: new Date(Date.now() + 2 * 3600000)
