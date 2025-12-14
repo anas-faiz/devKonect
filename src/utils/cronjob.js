@@ -1,5 +1,5 @@
-const cron = require ("node-cron")
+// const cron = require ("node-cron")
 
-cron.schedule("* * * * *", ()=>{
-    console.log ("hello")
-})
+// cron.schedule("* * * * *", ()=>{
+//     console.log ("hello " + new Date())
+// })
