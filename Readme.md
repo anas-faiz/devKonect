@@ -1,4 +1,5 @@
 # DevKonnect
+**CHECK OUT**  🌐 [DevKonect](https://devkonect.live/)
 
 **DevKonnect** is a developer networking platform designed to help developers connect, collaborate, and share ideas. It allows users to create and update their profiles, explore a developer feed, and send or receive connection requests in a simple and efficient way.
 
