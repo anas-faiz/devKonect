@@ -42,7 +42,7 @@ DevKonnect is designed using a **microservices-based architecture**:
 ## 🎨 Frontend Tech Stack
 
 - **React.js** – Frontend library for building interactive UIs
-- **Tailwind CSS** *(optional but recommended)* – Utility-first CSS for styling
+- **Tailwind CSS**  – Utility-first CSS for styling
 
 ---
 
