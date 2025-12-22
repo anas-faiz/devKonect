@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 require("./utils/cronjob")
 
 app.use(cors({
-  origin: 'https://devkonect-web.vercel.app/',
+  origin: 'http://localhost:5173/',
   credentials: true
 }))
 app.use(express.json());
