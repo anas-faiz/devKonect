@@ -3,8 +3,9 @@ const { connectDB } = require("./config/dataBase");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const app = express();
+require("dotenv").config()
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 
 require("./utils/cronjob")
 
