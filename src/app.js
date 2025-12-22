@@ -5,14 +5,17 @@ const cors = require('cors');
 const app = express();
 require("dotenv").config()
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 require("./utils/cronjob")
 
 app.use(cors({
-  origin: 'http://localhost:5173/',
-  credentials: true
-}))
+  origin: 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
