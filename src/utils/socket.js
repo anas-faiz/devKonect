@@ -10,6 +10,12 @@ function initializeSocket(server){
     
     io.on("connection",(socket)=>{
       //handle connection
+      socket.on("joinChat",()=>{});
+
+      socket.on("sendMessage",()=>{});
+
+      socket.on("disconnect",()=>{});
+
     })
     
 
