@@ -10,52 +10,53 @@ function initializeSocket(server) {
   });
 
   io.on("connection", (socket) => {
-  // Join private chat room
+    console.log("🟢 Socket connected:", socket.id);
+
     socket.on("joinChat", ({ userId, targetUserId }) => {
       if (!userId || !targetUserId) return;
 
       const roomId = [userId, targetUserId].sort().join("-");
       socket.join(roomId);
-      
     });
 
-    // Send message
     socket.on("sendMessage", async (messageData) => {
-      
-      
-      try{
-        const { sender, receiver,message } = messageData;
+      try {
+        const { sender, receiver, message } = messageData;
 
-      if (!sender || !receiver) return;
+        if (!sender || !receiver || !message?.trim()) return;
 
-      const roomId = [sender, receiver].sort().join("-");
+        const roomId = [sender, receiver].sort().join("-");
 
-      //save chat in database
         let chat = await Chat.findOne({
-          participants: { $all: [sender,receiver]}
-        })
+          participants: { $all: [sender, receiver] },
+        });
 
-        if(!chat){
+        if (!chat) {
           chat = new Chat({
-            participants: [sender,receiver],
-            messages:[],
-          })
+            participants: [sender, receiver],
+            messages: [],
+          });
         }
 
         chat.messages.push({
           senderId: sender,
-          message
-        })
+          message,
+        });
 
-        await chat.save        
+        await chat.save();
 
-      // Emit to everyone in room (including sender)
-      io.to(roomId).emit("messageReceived", messageData);
-      
-      }catch(err){
-        console.error(err)
+        const savedMessage = chat.messages.at(-1);
+
+        io.to(roomId).emit("messageReceived", {
+          sender,
+          receiver,
+          message: savedMessage.message,
+          createdAt: savedMessage.createdAt,
+        });
+
+      } catch (err) {
+        console.error("❌ Socket message error:", err);
       }
-
     });
 
     socket.on("disconnect", () => {
