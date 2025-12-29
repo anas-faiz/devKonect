@@ -9,16 +9,13 @@ function initializeSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    console.log("🟢 New socket connected:", socket.id);
-
-    // Join private chat room
+  // Join private chat room
     socket.on("joinChat", ({ userId, targetUserId }) => {
       if (!userId || !targetUserId) return;
 
       const roomId = [userId, targetUserId].sort().join("-");
       socket.join(roomId);
-
-      console.log(`User joined room: ${roomId}`);
+      
     });
 
     // Send message
@@ -31,7 +28,7 @@ function initializeSocket(server) {
 
       // Emit to everyone in room (including sender)
       io.to(roomId).emit("messageReceived", message);
-      console.log(message)
+      
     });
 
     socket.on("disconnect", () => {
