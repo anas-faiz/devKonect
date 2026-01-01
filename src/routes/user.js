@@ -64,7 +64,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         let limit = parseInt(req.query.limit) || 10;
             
-        limit >50 ? 50 : limit;
+         limit = Math.min(limit, 50);
         
         const skip = (page-1)*limit;
 
@@ -84,7 +84,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
                 {_id: {$nin: Array.from(hideUsers)}},
                 {_id: {$ne: loggedInUser._id}}
             ]            
-        }).select(user_safe_data).skip(skip).limit(limit).lean()
+        }).select(user_safe_data).sort({ createdAt: -1 }).skip(skip).limit(limit).lean()
 
         res.json({
             message: "Feed fetched successfullt",
